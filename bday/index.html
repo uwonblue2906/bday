@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Birthday Card</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(120deg, #fff8dc, #fff176);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .balloon {
+        width: 30px;
+        height: 40px;
+        background-color: #ff4081;
+        border-radius: 50%;
+        position: absolute;
+        bottom: -50px;
+        animation: floatUp 8s ease-in infinite;
+        opacity: 0.8;
+      }
+
+      .balloon::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        width: 2px;
+        height: 12px;
+        background-color: #555;
+        transform: translateX(-50%);
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) translateX(0);
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(-120vh) translateX(-20px);
+          opacity: 0;
+        }
+      }
+
+      .screen {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #ffecb3, #fff9c4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        transition: opacity 0.7s ease, visibility 0.7s;
+        z-index: 2;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .screen h1 {
+        font-size: 32px;
+        color: #ffb300;
+        margin-bottom: 20px;
+        animation: fadeInUp 1s ease forwards;
+      }
+
+      .screen button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 25px;
+        background-color: #fdd835;
+        color: #333;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        animation: fadeInUp 1.5s ease forwards;
+      }
+
+      .card {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+        max-width: 380px;
+        text-align: left;
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+        z-index: 1;
+        line-height: 1.6;
+      }
+
+      .card h1 {
+        font-size: 22px;
+        color: #fbc02d;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .card p {
+        font-size: 15px;
+        color: #444;
+        white-space: pre-line;
+      }
+
+      .from {
+        margin-top: 25px;
+        font-weight: bold;
+        color: #666;
+      }
+
+      .balloons {
+        font-size: 36px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .show-card .card {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .hide-screen {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 430px) {
+        .card {
+          padding: 20px;
+          max-width: 90%;
+        }
+
+        .card h1 {
+          font-size: 20px;
+        }
+
+        .card p {
+          font-size: 14px;
+        }
+
+        .screen h1 {
+          font-size: 26px;
+        }
+
+        .screen button {
+          font-size: 14px;
+          padding: 10px 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="screen" id="startScreen">
+      <h1>
+        🎂 Happy Birthday Kim 🎉 <br />
+        210725
+      </h1>
+      <button onclick="openCard()">Open Card 🎁</button>
+    </div>
+
+    <div class="card" id="birthdayCard">
+      <div class="balloons">🎈🎉🥳</div>
+      <h1>Happee Birthdae, Kimin!</h1>
+      <p>
+        Dear Kimin, <br />
+        You show up in this world being all confusing, chill, and kinda hard to
+        read — but somehow, I'm lucky you did. Hope we stay close, fr. <br />
+        Happy birthday. <br />
+        Hope life treats you well — more peace, more people who get you, and
+        moments that make you feel seen. <br />
+        Jangan lupa mabar roblok ama aku yh ^^
+      </p>
+      <div class="from">Love, Dinda pacar clairo</div>
+    </div>
+
+    <audio
+      id="bgm"
+      src="https://www.orangefreesounds.com/wp-content/uploads/2016/08/Happy-birthday-instrumental.mp3"
+      loop
+    ></audio>
+
+    <script>
+      function openCard() {
+        document.body.classList.add("show-card");
+        document.getElementById("startScreen").classList.add("hide-screen");
+
+        const bgm = document.getElementById("bgm");
+        bgm.volume = 0.3;
+        bgm.play().catch((e) => console.log("Autoplay error:", e));
+
+        // Generate floating balloons
+        for (let i = 0; i < 15; i++) {
+          const b = document.createElement("div");
+          b.classList.add("balloon");
+          b.style.left = Math.random() * 100 + "vw";
+          b.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 70%)`;
+          b.style.animationDelay = Math.random() * 5 + "s";
+          document.body.appendChild(b);
+        }
+      }
+    </script>
+  </body>
+</html>
